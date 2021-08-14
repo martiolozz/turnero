@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/recepcion.css">
+    <title>Recepcion</title>
+</head>
+<body>
+    <div class="contenedor-total">
+        <div class="botones-asignar-crear">
+            <button class="btn btn-asignar-consultorio">Asignar</button>
+            <button class="btn btn-nuevo-paciente">Nuevo</button>
+        </div>
+
+        <div class="contenedor-turnos">
+            <div class="proximos">
+                <div class="contenedor-titulo">
+                    <h2 class="titulo-proximos">Proximos</h2>
+                </div>
+                <div class="contenedor-proximos-turnos"></div>
+            </div>
+            <div class="activos">
+                <div class="contenedor-titulo">
+                    <h2 class="titulo-proximos">Activos</h2>
+                </div>
+                <div class="contenedor-turnos-activos"></div>
+            </div>
+            <div class="consultorios">
+                <div class="contenedor-titulo">
+                    <h2 class="titulo-proximos">Consultorios</h2>
+                </div>
+                <div class="contenedor-consultorios"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-database.js"></script>
+    <script src="./scripts/recepcion.js"></script>
+</body>
+</html>
