@@ -230,14 +230,27 @@ h4 {
     padding: 20px;
     border-radius: 5px;
     width: 150px;
-    height: 250px;
+    height: 220px;
     margin: 20px 20px 0px 20px;
 }
 
 .numero-consultorio-grande {
     color: #E61A2E;
+    margin-top: 10px;
 }
 
 .input-consultorio {
     width: 90%;
+}
+
+.contenedor-fecha {
+    position: absolute;
+    top: 10px;
+    left: calc(50% - (width/2));
+}
+
+.contenedor-hora {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
 }

@@ -4,6 +4,8 @@ const btnNuevoPaciente = document.querySelector('.btn-nuevo-paciente');
 const contenedorConsultorios = document.querySelector('.contenedor-consultorios');
 const contenedorProximosTurnos = document.querySelector('.contenedor-proximos-turnos');
 const inputNombre = document.getElementById('input-nombre');
+const textoFecha = document.querySelector('.texto-fecha');
+const textoHora = document.querySelector('.texto-hora');
 
 // Conexion con firebase
 var firebaseConfig = {
@@ -14,7 +16,20 @@ var firebaseConfig = {
     messagingSenderId: "1031203124717",
     appId: "1:1031203124717:web:cdd44535598372cea0e3e4",
     measurementId: "G-TSRHSKTCTF"
-    };
+};
+
+setInterval(ponerLaFecha, 1000);
+
+function ponerLaFecha() {
+    const fecha = new Date();    
+    const stringFecha = fecha.toISOString().split('T')[0];
+    const hora = fecha.getHours();
+    const horaLegible = hora % 12
+    const minutos = fecha.getMinutes();
+    const segundos = fecha.getSeconds();
+    textoFecha.innerHTML = `${stringFecha}`;
+    textoHora.innerHTML =  `${horaLegible < 1 ? `12` : horaLegible}:${minutos < 10 ? `0${minutos}` : minutos}:${segundos < 10 ? `0${segundos}` : segundos}`;
+}
 
 // Initializo Firebase
 firebase.initializeApp(firebaseConfig);
@@ -22,12 +37,14 @@ firebase.initializeApp(firebaseConfig);
 // Creo la referencia a la base de datos como tal
 database = firebase.database();
 
+const fecha = new Date();    
+const stringFecha = fecha.toISOString().split('T')[0];
 // Creo la referencia al "nodo" consultorios en la base de datos
-var refConsultorios = database.ref('consultorios');
+var refConsultorios = database.ref(stringFecha + '/consultorios');
 refConsultorios.on('value', gotConsultorios, errData);
 
 // Creo la referencia al "nodo" proximos-turnos
-var referenciaProximosTurnos = database.ref('proximos-turnos');
+var referenciaProximosTurnos = database.ref(stringFecha + '/proximos-turnos');
 referenciaProximosTurnos.on('value', gotProximos, errData);
 
 // Esta es la funcion para pasarle referenciaProximosTurnos
@@ -40,6 +57,7 @@ function gotProximos(data) {
     var turnos = data.val();
     var keys = Object.keys(turnos);
 
+    // Recorremos turnos 
     for (let i = 0; i < keys.length; i++) {
         var k = keys[i];
         var turno = turnos[k].turno;
@@ -112,7 +130,9 @@ function borrarAnterioresConsultorios() {
     contenedorConsultorios.innerHTML = ''
 }
 
+// Event listener del boton asignar consultorio
 btnAsignarConsultorio.addEventListener('click', () => {
+    // Llamamos a la funcion para crear el popup de asignar un consultorio
     createPopUpAsignar();
     
     // Traigo todos los elemntos de el DOM que necesito
@@ -124,15 +144,20 @@ btnAsignarConsultorio.addEventListener('click', () => {
     const inputEntrada = document.getElementById('input-entrada')
     const inputSalida = document.getElementById('input-salida')
 
+    const fecha = new Date();    
+    const stringFecha = fecha.toISOString().split('T')[0];
+
     // EventListener del boton para aceptar asignar un consultorio
     btnAceptar.addEventListener('click', () => {
-        firebase.database().ref('consultorios').push({
+        firebase.database().ref(stringFecha + '/consultorios/' + inputConsultorio.value).set({
             profesional: inputProfesional.value,
             profesion: inputProfesion.value,
             consultorio: inputConsultorio.value,
             horaEntrada: inputEntrada.value,
             horaSalida: inputSalida.value
         });
+        // Yo la verdad no se si sea lo mas viable hacer esto, pero aqui 
+        // borramos el popup que acabamos de crear para asignar un consultorio
         btnAceptar.parentElement.parentElement.parentElement.remove()
     })
 
@@ -153,11 +178,14 @@ btnNuevoPaciente.addEventListener('click', () => {
     const inputTurno = document.getElementById('input-turno')
     const inputConsultorio = document.getElementById('input-consultorio')
 
+    const fecha = new Date();    
+    const stringFecha = fecha.toISOString().split('T')[0];
+
     // EventListener del boton aceptar crear usuario
     btnAceptar.addEventListener('click', () => {
         // Creo la referencia a 'proximos-turnos' en firebase y le pusheo el nuevo turno
         // el cual queda con un UID como padre de el nodo
-        firebase.database().ref('proximos-turnos').push({
+        firebase.database().ref(stringFecha + '/proximos-turnos').push({
                 paciente: inputNombre.value,
                 turno: inputTurno.value,
                 consultorio: inputConsultorio.value
