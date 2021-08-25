@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgba(59, 66, 148, 0.1);
+    font-family: 'Muli', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+}
+
+.titulo-general {
+    position: absolute;
+    top: 10px;
+    left: calc(100vw - (width / 2));
+    color: #3B4294;
+}
+
+.contenedor-proximos-activo {
+    width: 90vw;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.contenedor-proximos-turnos {
+    color: #3B4294;
+    width: 35%;
+    height: 100%;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.contenedor-turno-activo {
+    color: #3B4294;
+    width: 45%;
+    height: 100%;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.btn-chat {
+    background-color: #3B4294;
+    color: #fff;
+    font-size: 2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.btn-chat:hover {
+    transform: scale(1.1);
+}
+
+.contenedor-turnos {
+    background-color: rgba(59, 66, 148, 0.1);
+    height: 80%;
+    border-radius: 5%;
+}
+
+.contenedor-turno-detallado {
+    background-color: rgba(59, 66, 148, 0.1);
+    height: 80%;
+    border-radius: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.contenedor-botones {
+    width: 150px;
+    height: 50px;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.btn-cerrar {
+    background-color: rgba(0, 0, 0, 0);
+    color: #3B4294;
+    font-size: 1.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+    margin-left: 5px;
+}
+
+.btn-llamar {
+    background-color: rgba(0, 0, 0, 0);
+    color: #3B4294;
+    font-size: 1.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+}
