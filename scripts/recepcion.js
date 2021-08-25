@@ -6,6 +6,7 @@ const contenedorProximosTurnos = document.querySelector('.contenedor-proximos-tu
 const inputNombre = document.getElementById('input-nombre');
 const textoFecha = document.querySelector('.texto-fecha');
 const textoHora = document.querySelector('.texto-hora');
+let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
 // Conexion con firebase
 var firebaseConfig = {
@@ -21,13 +22,15 @@ var firebaseConfig = {
 setInterval(ponerLaFecha, 1000);
 
 function ponerLaFecha() {
-    const fecha = new Date();    
-    const stringFecha = fecha.toISOString().split('T')[0];
+    const fecha = new Date();
+    const dia = fecha.getDate();
+    const mes = fecha.getUTCMonth() + 1;
+    const year = fecha.getFullYear();
     const hora = fecha.getHours();
     const horaLegible = hora % 12
     const minutos = fecha.getMinutes();
     const segundos = fecha.getSeconds();
-    textoFecha.innerHTML = `${stringFecha}`;
+    textoFecha.innerHTML = `${dia} ${meses[mes - 1]} ${year}`;
     textoHora.innerHTML =  `${horaLegible < 1 ? `12` : horaLegible}:${minutos < 10 ? `0${minutos}` : minutos}:${segundos < 10 ? `0${segundos}` : segundos}`;
 }
 
@@ -37,8 +40,11 @@ firebase.initializeApp(firebaseConfig);
 // Creo la referencia a la base de datos como tal
 database = firebase.database();
 
-const fecha = new Date();    
-const stringFecha = fecha.toISOString().split('T')[0];
+const fecha = new Date();
+const dia = fecha.getDate();
+const mes = fecha.getUTCMonth() + 1;
+const year = fecha.getFullYear();  
+const stringFecha = `${dia} ${meses[mes - 1]} ${year}`;
 // Creo la referencia al "nodo" consultorios en la base de datos
 var refConsultorios = database.ref(stringFecha + '/consultorios');
 refConsultorios.on('value', gotConsultorios, errData);
@@ -136,16 +142,13 @@ btnAsignarConsultorio.addEventListener('click', () => {
     createPopUpAsignar();
     
     // Traigo todos los elemntos de el DOM que necesito
-    const btnAceptar = document.getElementById('aceptar')
-    const btnCancelar = document.getElementById('cancelar')
-    const inputProfesional = document.getElementById('input-profesional')
-    const inputProfesion = document.getElementById('input-profesion')
-    const inputConsultorio = document.getElementById('input-consultorio')
-    const inputEntrada = document.getElementById('input-entrada')
-    const inputSalida = document.getElementById('input-salida')
-
-    const fecha = new Date();    
-    const stringFecha = fecha.toISOString().split('T')[0];
+    const btnAceptar = document.getElementById('aceptar');
+    const btnCancelar = document.getElementById('cancelar');
+    const inputProfesional = document.getElementById('input-profesional');
+    const inputProfesion = document.getElementById('input-profesion');
+    const inputConsultorio = document.getElementById('input-consultorio');
+    const inputEntrada = document.getElementById('input-entrada');
+    const inputSalida = document.getElementById('input-salida');
 
     // EventListener del boton para aceptar asignar un consultorio
     btnAceptar.addEventListener('click', () => {
@@ -172,14 +175,11 @@ btnNuevoPaciente.addEventListener('click', () => {
     createPopUpNuevo();
 
     // Aqui traigo todos los elementos con los que voy a trabajar
-    const btnAceptar = document.getElementById('aceptar')
-    const btnCancelar = document.getElementById('cancelar')
-    const inputNombre = document.getElementById('input-nombre')
-    const inputTurno = document.getElementById('input-turno')
-    const inputConsultorio = document.getElementById('input-consultorio')
-
-    const fecha = new Date();    
-    const stringFecha = fecha.toISOString().split('T')[0];
+    const btnAceptar = document.getElementById('aceptar');
+    const btnCancelar = document.getElementById('cancelar');
+    const inputNombre = document.getElementById('input-nombre');
+    const inputTurno = document.getElementById('input-turno');
+    const inputConsultorio = document.getElementById('input-consultorio');
 
     // EventListener del boton aceptar crear usuario
     btnAceptar.addEventListener('click', () => {
