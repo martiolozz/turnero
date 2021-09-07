@@ -180,6 +180,8 @@ btnNuevoPaciente.addEventListener('click', () => {
     const inputNombre = document.getElementById('input-nombre');
     const inputTurno = document.getElementById('input-turno');
     const inputConsultorio = document.getElementById('input-consultorio');
+    const inputEntrada = document.getElementById('input-entrada');
+    const inputSalida = document.getElementById('input-salida');
 
     // EventListener del boton aceptar crear usuario
     btnAceptar.addEventListener('click', () => {
@@ -188,7 +190,9 @@ btnNuevoPaciente.addEventListener('click', () => {
         firebase.database().ref(stringFecha + '/proximos-turnos').push({
                 paciente: inputNombre.value,
                 turno: inputTurno.value,
-                consultorio: inputConsultorio.value
+                consultorio: inputConsultorio.value,
+                horaInicio: inputEntrada.value,
+                horaFin: inputSalida.value 
         });
         // elimino el popup para crear turno del DOM
         btnAceptar.parentElement.parentElement.parentElement.remove()
@@ -207,7 +211,7 @@ function createPopUpNuevo() {
     popup.classList.add('container-popup-nuevo')
 
     popup.innerHTML = `
-    <h1>Nuevo Registro</h1>
+    <h1>Nuevo Paciente</h1>
     <div class="settings">
         <div class="setting-nombre">
             <label>Nombre:</label>
@@ -221,6 +225,16 @@ function createPopUpNuevo() {
             <div class="setting">
                 <label>Consultorio:</label>
                 <input type="number" id="input-consultorio" min="1" max="1000" value="999">
+            </div>
+        </div>
+        <div class="contenedor-turno-consultorio">
+            <div class="setting">
+                <label>Entrada:</label>
+                <input type="time" id="input-entrada" min="06:00" max="19:00" value="08:00">
+            </div>
+            <div class="setting">
+                <label>Salida:</label>
+                <input type="time" id="input-salida" min="06:00" max="19:00" value="08:00">
             </div>
         </div>
         <div class="contenedor-botones">
