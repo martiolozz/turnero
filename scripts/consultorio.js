@@ -60,13 +60,26 @@ function gotProximos(data) {
         // Aqui insertamos al DOM el turno creado en contenedorProximosTurnos
         contenedorProximosTurnos.appendChild(nuevoTurno)
 
-        // Aqui si estamos llamando un EventListener en los proximos turnos para
-        // borralos de la base de datos en firebase, pero esto se va 
+        // Aqui llego y le pongo el event listener a los turnos-proximos
         nuevoTurno.addEventListener('click', () => {
-            referenciaProximosTurnos.child(nuevoTurno.id).remove();
+            //Creo la referencia la base de datos del turno que clickearon
+            var referenciaTurno = database.ref(stringFecha + '/proximos-turnos/' + nuevoTurno.id);
+            referenciaTurno.on('value', hagaEsto, errData);
         })
     }  
 
+}
+
+function hagaEsto(data) {
+    var turno = data.val();
+    
+    firebase.database().ref(stringFecha + '/turnos-activos').push({
+        paciente: turno.paciente,
+        turno: turno.turno,
+        consultorio: turno.consultorio,
+        horaInicio: turno.horaInicio,
+        horaFin: turno.horaFin
+    });
 }
 
 function errData(err) {

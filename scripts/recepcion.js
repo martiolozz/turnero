@@ -152,7 +152,7 @@ btnAsignarConsultorio.addEventListener('click', () => {
 
     // EventListener del boton para aceptar asignar un consultorio
     btnAceptar.addEventListener('click', () => {
-        firebase.database().ref(stringFecha + '/consultorios/' + inputConsultorio.value).set({
+        firebase.database().ref(stringFecha + '/consultorios/').push({
             profesional: inputProfesional.value,
             profesion: inputProfesion.value,
             consultorio: inputConsultorio.value,
