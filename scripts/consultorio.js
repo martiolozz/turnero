@@ -1,4 +1,5 @@
 const contenedorProximosTurnos = document.querySelector('.contenedor-turnos');
+const contenedorTurnoDetallado = document.querySelector('.contenedor-turno-detallado');
 let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
 // Conexion con firebase
@@ -27,6 +28,10 @@ const stringFecha = `${dia} ${meses[mes - 1]} ${year}`;
 // Creo la referencia al "nodo" proximos-turnos
 var referenciaProximosTurnos = database.ref(stringFecha + '/proximos-turnos');
 referenciaProximosTurnos.orderByChild("consultorio").equalTo("112").on('value', gotProximos, errData);
+
+// Creo la referencia al "nodo" turnos-activos
+var referenciaTurnoActivo = database.ref(stringFecha + '/turnos-activos');
+referenciaTurnoActivo.orderByChild("consultorio").equalTo("112").on('value', gotActivo, errData);
 
 // Esta es la funcion para pasarle referenciaProximosTurnos
 function gotProximos(data) {
@@ -62,15 +67,54 @@ function gotProximos(data) {
 
         // Aqui llego y le pongo el event listener a los turnos-proximos
         nuevoTurno.addEventListener('click', () => {
-            //Creo la referencia la base de datos del turno que clickearon
-            var referenciaTurno = database.ref(stringFecha + '/proximos-turnos/' + nuevoTurno.id);
-            referenciaTurno.on('value', hagaEsto, errData);
+            if (contenedorTurnoDetallado.innerHTML === '') {
+                // Creo la referencia a la base de datos del turno que clickearon
+                var referenciaTurno = database.ref(stringFecha + '/proximos-turnos/' + nuevoTurno.id);
+                referenciaTurno.on('value', activarTurno, errData);
+                referenciaProximosTurnos.child(nuevoTurno.id).remove(); 
+            } else {
+                console.log("No senorita");
+            }     
         })
     }  
-
 }
 
-function hagaEsto(data) {
+function gotActivo(data) {
+    limpiarTurnoActivo();
+
+    var turnos = data.val();
+    var keys = Object.keys(turnos);
+
+    for (let i = 0; i < keys.length; i++) {
+        var k = keys[i];
+        var nombre = turnos[k].paciente;
+        var turno = turnos[k].turno;
+        var horaInicio = turnos[k].horaInicio;
+        var horaFin = turnos[k].horaFin;
+        
+        const contenedorDoble = document.createElement('div');
+        contenedorDoble.classList.add('contenedor-doble');
+        contenedorDoble.innerHTML = `
+        <div class="contenedor-botones">
+            <button class="btn-llamar">
+                <i class="fas fa-volume-up"></i>
+            </button>
+            <button class="btn-cerrar">
+                <i class="far fa-times-circle"></i>
+            </button>
+        </div>
+        <div class="contenedor-informacion-turno">
+            <h2 class="titulo-mediano">Nombre: ${nombre}</h2>
+            <h2 class="titulo-mediano">Turno: ${turno}</h2>
+            <h2 class="titulo-mediano">Horario: ${horaInicio} - ${horaFin}</h2>
+        </div>
+        `
+
+        contenedorTurnoDetallado.appendChild(contenedorDoble);
+    }
+}
+
+function activarTurno(data) {
     var turno = data.val();
     
     firebase.database().ref(stringFecha + '/turnos-activos').push({
@@ -88,5 +132,9 @@ function errData(err) {
 }
 
 function borrarAnterioresProximosTurnos() {
-    contenedorProximosTurnos.innerHTML = ''
+    contenedorProximosTurnos.innerHTML = '';
+}
+
+function limpiarTurnoActivo() {
+    contenedorTurnoDetallado.innerHTML = '';
 }
