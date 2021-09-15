@@ -109,6 +109,7 @@ function gotActivo(data) {
             <h2 class="titulo-mediano">Turno: ${turno}</h2>
             <h2 class="titulo-mediano">Horario: ${horaInicio} - ${horaFin}</h2>
         </div>
+        <div class="barra-tempo"></div>
         `
 
         contenedorTurnoDetallado.appendChild(contenedorDoble);
