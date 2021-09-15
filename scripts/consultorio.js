@@ -73,7 +73,7 @@ function gotProximos(data) {
                 referenciaTurno.on('value', activarTurno, errData);
                 referenciaProximosTurnos.child(nuevoTurno.id).remove(); 
             } else {
-                console.log("No senorita");
+                createPopupYahay();
             }     
         })
     }  
@@ -94,6 +94,7 @@ function gotActivo(data) {
         
         const contenedorDoble = document.createElement('div');
         contenedorDoble.classList.add('contenedor-doble');
+        contenedorDoble.setAttribute("id", k);
         contenedorDoble.innerHTML = `
         <div class="contenedor-botones">
             <button class="btn-llamar">
@@ -111,6 +112,29 @@ function gotActivo(data) {
         `
 
         contenedorTurnoDetallado.appendChild(contenedorDoble);
+
+        const botonFinalizar = document.querySelector('.btn-cerrar');
+        botonFinalizar.addEventListener('click', () => {
+            createPopupFinalizar();
+
+            const botonCerrar = document.querySelector('.btn-close');
+            const botonAtendido = document.querySelector('.btn-realizado');
+            const botonNollego = document.querySelector('.btn-nollego');
+
+            botonCerrar.addEventListener('click', () => {
+                botonCerrar.parentElement.remove();
+            })
+
+            botonAtendido.addEventListener('click', () => {
+                referenciaTurnoActivo.child(botonFinalizar.parentElement.parentElement.id).remove();
+                botonCerrar.parentElement.remove();
+            })
+
+            botonNollego.addEventListener('click', () => {
+                referenciaTurnoActivo.child(botonFinalizar.parentElement.parentElement.id).remove();
+                botonCerrar.parentElement.remove();
+            })
+        })
     }
 }
 
@@ -137,4 +161,48 @@ function borrarAnterioresProximosTurnos() {
 
 function limpiarTurnoActivo() {
     contenedorTurnoDetallado.innerHTML = '';
+}
+
+function createPopupFinalizar() {
+    const popup = document.createElement('div')
+    popup.classList.add('contenedor-popup-finalizar')
+
+    popup.innerHTML = `
+    <h2>Finalizar el turno</h2>
+    <div class="contenedor-botones-finalizar">
+        <button class="btn-nollego">
+            <i class="fas fa-times"></i>
+        </button>
+        <button class="btn-realizado">
+            <i class="fas fa-check"></i>
+        </button>
+    </div>
+    <button class="btn-close">
+        <i class="fas fa-times"></i>
+    </button>
+    <p class="explicacion">Marcar como atendido o no atendido</p>
+    `
+
+    document.body.appendChild(popup);
+}
+
+function createPopupYahay() {
+    const popup = document.createElement('div');
+    popup.classList.add('ups-popup');
+
+    popup.innerHTML = `
+    <div class="contenedor-equis">
+        <i class="fas fa-times"></i>
+    </div>
+    <h2>Ups! Parece que ya tienes un turno activo</h2>
+    `
+
+    document.body.appendChild(popup);
+
+    setTimeout(borrarPopup, 2000);
+}
+
+function borrarPopup() {
+    var popup = document.querySelector('.ups-popup');
+    popup.remove();
 }

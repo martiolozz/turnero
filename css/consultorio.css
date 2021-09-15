@@ -106,6 +106,7 @@ body {
     border-radius: 5px;
     border: none;
     margin-left: 5px;
+    cursor: pointer;
 }
 
 .btn-llamar {
@@ -116,6 +117,7 @@ body {
     height: 50px;
     border-radius: 5px;
     border: none;
+    cursor: pointer;
 }
 
 .proximo-turno {
@@ -151,4 +153,84 @@ body {
 .numero-turno {
     font-family: inherit;
     margin: 0;
+}
+
+.contenedor-popup-finalizar {
+    background-color: #fff;
+    color: #3B4294;
+    width: 300px;
+    height: 200px;
+    border-color: #3B4294;
+    border-radius: 5px;
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.contenedor-botones-finalizar {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.btn-nollego {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #E61A2E;
+    color: #fff;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.btn-realizado {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: lightgreen;
+    color: #fff;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer; 
+}
+
+.btn-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: none;
+    background-color: #fff;
+    color: #3B4294;
+    cursor: pointer;
+}
+
+.explicacion {
+    color: #afafaf;
+}
+
+.ups-popup {
+    background-color: #fff;
+    color: #3B4294;
+    width: 500px;
+    height: 150px;
+    border-radius: 10px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenedor-equis {
+    background-color: #E61A2E;
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
 }
