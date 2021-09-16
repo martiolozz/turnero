@@ -25,6 +25,10 @@ h1 {
     color: #3B4294;
 }
 
+h2 {
+    color: #3B4294;
+}
+
 .contenedor-total {
     width: 100vw;
     height: 100vh;
@@ -86,9 +90,8 @@ h1 {
 .turno {
     background-color: rgba(59, 66, 148, 0.2);
     width: 7%;
-    height: 90%;
-    margin-left: 0.35%;
-    margin-right: 0.35%;
+    height: 80%;
+    margin-left: 2%;
     border-radius: 5px;
     display: flex;
     justify-content: center;
