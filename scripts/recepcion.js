@@ -3,6 +3,7 @@ const btnAsignarConsultorio = document.querySelector('.btn-asignar-consultorio')
 const btnNuevoPaciente = document.querySelector('.btn-nuevo-paciente');
 const contenedorConsultorios = document.querySelector('.contenedor-consultorios');
 const contenedorProximosTurnos = document.querySelector('.contenedor-proximos-turnos');
+const contenedorTurnosActivos = document.querySelector('.contenedor-turnos-activos');
 const inputNombre = document.getElementById('input-nombre');
 const textoFecha = document.querySelector('.texto-fecha');
 const textoHora = document.querySelector('.texto-hora');
@@ -52,6 +53,10 @@ refConsultorios.on('value', gotConsultorios, errData);
 // Creo la referencia al "nodo" proximos-turnos
 var referenciaProximosTurnos = database.ref(stringFecha + '/proximos-turnos');
 referenciaProximosTurnos.on('value', gotProximos, errData);
+
+// Creo la referencia al "nodo" proximos-turnos
+var referenciaTurnosActivos = database.ref(stringFecha + '/turnos-activos');
+referenciaTurnosActivos.on('value', gotActivos, errData);
 
 // Esta es la funcion para pasarle referenciaProximosTurnos
 function gotProximos(data) {
@@ -121,7 +126,32 @@ function gotConsultorios(data) {
         <h4 class="horario">${horaEntrada} - ${horaSalida}</h3>
         `
 
-        contenedorConsultorios.appendChild(nuevoConsultorio)
+        contenedorConsultorios.appendChild(nuevoConsultorio);
+    }
+}
+
+function gotActivos(data) {
+    borrarAnterioresTurnosActivos();
+    var turnos = data.val();
+    var keys = Object.keys(turnos);
+
+    for (let i = 0; i < keys.length; i++) {
+        var k = keys[i];
+        var turno = turnos[k].turno;
+        var consultorio = turnos[k].consultorio;
+
+        const turnoActivo = document.createElement('div')
+        turnoActivo.classList.add('proximo-turno')
+        turnoActivo.innerHTML = `
+        <div class="contenedor-num-consultorio">
+            <h3 class="numero-consultorio">C-${consultorio}</h3>
+        </div>
+        <div class="contenedor-num-turno">
+            <h3 class="numero-turno">T-${turno}</h3>
+        </div>
+        `  
+        
+        contenedorTurnosActivos.appendChild(turnoActivo);
     }
 }
 
@@ -134,6 +164,10 @@ function errData(err) {
 // Funcion para limpiarle el innerHTML al contenedorConsultorios
 function borrarAnterioresConsultorios() {
     contenedorConsultorios.innerHTML = ''
+}
+
+function borrarAnterioresTurnosActivos() {
+    contenedorTurnosActivos.innerHTML = ''
 }
 
 // Event listener del boton asignar consultorio
