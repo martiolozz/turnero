@@ -1,6 +1,7 @@
 const contenedorProximosTurnos = document.querySelector('.contenedor-turnos');
 const contenedorTurnoDetallado = document.querySelector('.contenedor-turno-detallado');
 let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+const nombreProfesional = document.querySelector('.nombre');
 
 // Conexion con firebase
 var firebaseConfig = {
@@ -28,6 +29,10 @@ const stringFecha = `${dia} ${meses[mes - 1]} ${year}`;
 // Creo la referencia al "nodo" proximos-turnos
 var referenciaProximosTurnos = database.ref(stringFecha + '/proximos-turnos');
 referenciaProximosTurnos.orderByChild("consultorio").equalTo("112").on('value', gotProximos, errData);
+
+// Creo la referencia al "nodo" consultorios en la base de datos
+var refConsultorios = database.ref(stringFecha + '/consultorios');
+refConsultorios.orderByChild("consultorio").equalTo("112").on('value', gotProfesional, errData);
 
 // Creo la referencia al "nodo" turnos-activos
 var referenciaTurnoActivo = database.ref(stringFecha + '/turnos-activos');
@@ -79,6 +84,19 @@ function gotProximos(data) {
     }  
 }
 
+function gotProfesional(data) {
+    limpiarNombreProfesional();
+    var consultorio = data.val();
+    var keys = Object.keys(consultorio);
+
+    for (let i = 0; i < keys.length; i++) {
+        var k = keys[i];
+        var profesional = consultorio[k].profesional;
+    }
+
+    nombreProfesional.innerHTML = `Dr. ${profesional}`
+}
+
 function gotActivo(data) {
     limpiarTurnoActivo();
 
@@ -91,6 +109,7 @@ function gotActivo(data) {
         var turno = turnos[k].turno;
         var horaInicio = turnos[k].horaInicio;
         var horaFin = turnos[k].horaFin;
+        var consultorio = turnos[k].consultorio;
         
         const contenedorDoble = document.createElement('div');
         contenedorDoble.classList.add('contenedor-doble');
@@ -127,11 +146,27 @@ function gotActivo(data) {
             })
 
             botonAtendido.addEventListener('click', () => {
+                firebase.database().ref(stringFecha + '/turnos-finalizados').push({
+                    horaInicio: horaInicio,
+                    horaFin: horaFin,
+                    consultorio: consultorio,
+                    estado: 'atendido',
+                    paciente: nombre,
+                    profesional: nombreProfesional.innerText
+                })
                 referenciaTurnoActivo.child(botonFinalizar.parentElement.parentElement.id).remove();
                 botonCerrar.parentElement.remove();
             })
 
             botonNollego.addEventListener('click', () => {
+                firebase.database().ref(stringFecha + '/turnos-finalizados').push({
+                    horaInicio: horaInicio,
+                    horaFin: horaFin,
+                    consultorio: consultorio,
+                    estado: 'No atendido',
+                    paciente: nombre,
+                    profesional: nombreProfesional.innerText
+                })
                 referenciaTurnoActivo.child(botonFinalizar.parentElement.parentElement.id).remove();
                 botonCerrar.parentElement.remove();
             })
@@ -206,4 +241,8 @@ function createPopupYahay() {
 function borrarPopup() {
     var popup = document.querySelector('.ups-popup');
     popup.remove();
+}
+
+function limpiarNombreProfesional() {
+    nombreProfesional.innerHTML = ''
 }

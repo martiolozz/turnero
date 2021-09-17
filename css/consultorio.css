@@ -254,6 +254,13 @@ body {
     transform: scaleX(0);
 }
 
+.nombre-profesional {
+    color: #3B4294;
+    position: absolute;
+    left: 50px;
+    bottom: 10px;
+}
+
 @keyframes grow {
     0% {
         transform: scaleX(1);
