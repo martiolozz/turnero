@@ -119,6 +119,7 @@ function gotConsultorios(data) {
 
         const nuevoConsultorio = document.createElement('div')
         nuevoConsultorio.classList.add('contenedor-consultorio')
+        nuevoConsultorio.setAttribute("id", k)
         nuevoConsultorio.innerHTML = `
         <h2 class="numero-consultorio-grande">${consultorio}</h2>
         <h4 class="nombre-profesional">Dr. ${profesional}</h3>
@@ -127,6 +128,44 @@ function gotConsultorios(data) {
         `
 
         contenedorConsultorios.appendChild(nuevoConsultorio);
+
+        nuevoConsultorio.addEventListener('click', () => {
+            createPopUpNuevo();
+    
+            // Aqui traigo todos los elementos con los que voy a trabajar
+            const btnAceptar = document.getElementById('aceptar');
+            const btnCancelar = document.getElementById('cancelar');
+            const inputNombre = document.getElementById('input-nombre');
+            const inputTurno = document.getElementById('input-turno');
+            const inputEntrada = document.getElementById('input-entrada');
+            const inputSalida = document.getElementById('input-salida');
+    
+            // EventListener del boton aceptar crear usuario
+            btnAceptar.addEventListener('click', () => {
+                // Creo la referencia a 'proximos-turnos' en firebase y le pusheo el nuevo turno
+                // el cual queda con un UID como padre de el nodo
+                firebase.database().ref(stringFecha + '/proximos-turnos').push({
+                        paciente: inputNombre.value,
+                        turno: inputTurno.value,
+                        consultorio: nuevoConsultorio.children[0].innerHTML,
+                        horaInicio: inputEntrada.value,
+                        horaFin: inputSalida.value 
+                });
+                // elimino el popup para crear turno del DOM
+                btnAceptar.parentElement.parentElement.parentElement.remove();
+            })  
+        
+            // EventListener del boton cancelar crear turno
+            btnCancelar.addEventListener('click', () => {
+                // Remuevo el popup para crear turno
+                btnCancelar.parentElement.parentElement.parentElement.remove();
+            })
+        })
+
+        nuevoConsultorio.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            refConsultorios.child(nuevoConsultorio.id).remove();
+        })
     }
 }
 
@@ -205,38 +244,7 @@ btnAsignarConsultorio.addEventListener('click', () => {
 })
 
 btnNuevoPaciente.addEventListener('click', () => {
-    // LLamo a la funcion que crear el pupop para crear nnuevo turno
-    createPopUpNuevo();
-
-    // Aqui traigo todos los elementos con los que voy a trabajar
-    const btnAceptar = document.getElementById('aceptar');
-    const btnCancelar = document.getElementById('cancelar');
-    const inputNombre = document.getElementById('input-nombre');
-    const inputTurno = document.getElementById('input-turno');
-    const inputConsultorio = document.getElementById('input-consultorio');
-    const inputEntrada = document.getElementById('input-entrada');
-    const inputSalida = document.getElementById('input-salida');
-
-    // EventListener del boton aceptar crear usuario
-    btnAceptar.addEventListener('click', () => {
-        // Creo la referencia a 'proximos-turnos' en firebase y le pusheo el nuevo turno
-        // el cual queda con un UID como padre de el nodo
-        firebase.database().ref(stringFecha + '/proximos-turnos').push({
-                paciente: inputNombre.value,
-                turno: inputTurno.value,
-                consultorio: inputConsultorio.value,
-                horaInicio: inputEntrada.value,
-                horaFin: inputSalida.value 
-        });
-        // elimino el popup para crear turno del DOM
-        btnAceptar.parentElement.parentElement.parentElement.remove()
-    })  
-
-    // EventListener del boton cancelar crear turno
-    btnCancelar.addEventListener('click', () => {
-        // Remuevo el popup para crear turno
-        btnCancelar.parentElement.parentElement.parentElement.remove()
-    })  
+    // Aqui va lo de poner el texto para la sala de espera
 })
 
 // Esta es la funcion para crear el poppup de crear un nuevo paciente
@@ -255,10 +263,6 @@ function createPopUpNuevo() {
             <div class="setting">
                 <label>Turno:</label>
                 <input type="number" id="input-turno" min="1" max="1000" value="999">
-            </div>
-            <div class="setting">
-                <label>Consultorio:</label>
-                <input type="number" id="input-consultorio" min="1" max="1000" value="999">
             </div>
         </div>
         <div class="contenedor-turno-consultorio">
