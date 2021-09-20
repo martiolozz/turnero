@@ -244,7 +244,25 @@ btnAsignarConsultorio.addEventListener('click', () => {
 })
 
 btnNuevoPaciente.addEventListener('click', () => {
-    // Aqui va lo de poner el texto para la sala de espera
+    createPopupTexto();
+
+    const btnAceptar = document.querySelector('.btn-aceptar-texto');
+    const btnCancelar = document.querySelector('.btn-cancelar-texto');
+    const textArea = document.querySelector('.input-texto-info');
+
+
+    btnCancelar.addEventListener('click', () => {
+        btnCancelar.parentElement.parentElement.remove();
+    })
+
+    btnAceptar.addEventListener('click', () => {
+        if (textArea.value != '') {  
+            firebase.database().ref(stringFecha + '/texto-informativo').set({
+                texto: textArea.value
+            })
+        }
+        btnAceptar.parentElement.parentElement.remove();
+    })
 })
 
 // Esta es la funcion para crear el poppup de crear un nuevo paciente
@@ -321,4 +339,20 @@ function createPopUpAsignar() {
     </div>
     `
     contenedorTotal.appendChild(popup)
+}
+
+function createPopupTexto() {
+    const popup = document.createElement('div');
+    popup.classList.add('popup-fijar-texto');
+
+
+    popup.innerHTML= `
+    <h2>Fijar el texto de la sala de espera</h2>
+        <textarea type="text" class="input-texto-info"></textarea>
+        <div class="contenedor-botones-texto">
+            <button class="btn-cancelar-texto">Cancelar</button>
+            <button class="btn-aceptar-texto">Aceptar</button>
+        </div>
+    `
+    contenedorTotal.appendChild(popup);
 }

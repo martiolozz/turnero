@@ -254,3 +254,50 @@ h4 {
     bottom: 10px;
     right: 15px;
 }
+
+.popup-fijar-texto {
+    background-color: #fff;
+    color: #3B4294;
+    width: 450px;
+    height: 350px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    position: absolute;
+}
+
+.input-texto-info {
+    width: 90%;
+    height: 60%;
+}
+
+.contenedor-botones-texto {
+    margin-top: 20px;
+    width: 90%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.btn-aceptar-texto {
+    background-color: #3B4294;
+    color: #fff;
+    border: none;
+    width: 130px;
+    height: 30px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btn-cancelar-texto {
+    background-color: #E61A2E;
+    color: #fff;
+    border: none;
+    width: 130px;
+    height: 30px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
