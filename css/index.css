@@ -167,18 +167,18 @@ h2 {
 
 .contenedor-texto {
     background-color: #fff;
+    text-align: left;
+    margin-top: 20px;
 }
 
 
 .mensaje {
     color: #3B4294;
-    transform: translateX(70%);
-    animation: animarTexto 50s linear 2s;
-}
-
-@keyframes animarTexto {
-    0% {transform: translateX(70%);}
-    100% {transform: translateX(calc(0% - 50px));}
+    text-align: left;
+    transform: translateX(100vw);
+    white-space: nowrap;
+    display: table-cell;
+    animation: animarTexto 60s linear infinite;
 }
 
 .boton-speech {
@@ -195,4 +195,9 @@ h2 {
     position: absolute;
     top: 25px;
     right: 25px;
+}
+
+@keyframes animarTexto {
+    0% {transform: translateX(100vw);}
+    100% {transform: translateX(-100%);}
 }

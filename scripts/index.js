@@ -2,7 +2,9 @@ const textoDelMensaje = document.querySelector('.mensaje');
 const botonSpeech = document.querySelector('.boton-speech');
 const turnosActivos = document.querySelector('.turnos-activos');
 const proximosTurnos = document.querySelector('.contenedor-proximos-turnos');
+const mensajeInformativo = document.querySelector('.mensaje');
 let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
 
 var firebaseConfig = {
     apiKey: "AIzaSyASln_15XoqvOwSbCArUvhbe7laec_1r-Y",
@@ -35,6 +37,9 @@ referenciaProximosTurnos.on('value', gotData, errData);
 
 var referenciaTurnosActivos = database.ref(stringFecha + '/turnos-activos');
 referenciaTurnosActivos.on('value', gotActivos, errData);
+
+var refMensaje = database.ref(stringFecha + '/texto-informativo');
+refMensaje.on('value', gotMensaje, errData);
 
 function gotData(data) {
     borrarAnterioresProximosTurnos();
@@ -86,6 +91,12 @@ function gotActivos(data) {
         
         turnosActivos.appendChild(turnoActivo);
     }
+}
+
+function gotMensaje(data) {
+    var mensaje = data.val();
+    var texto = mensaje.texto;
+    mensajeInformativo.innerText = texto;
 }
 
 function errData(err) {
