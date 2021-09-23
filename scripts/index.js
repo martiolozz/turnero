@@ -18,13 +18,6 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-botonSpeech.addEventListener("click", () => {
-    var msg = new SpeechSynthesisUtterance();
-    msg.lang = 'es';
-    msg.text = textoDelMensaje.innerHTML;
-    window.speechSynthesis.speak(msg);
-})
-
 const fecha = new Date();
 const dia = fecha.getDate();
 const mes = fecha.getUTCMonth() + 1;
@@ -40,6 +33,9 @@ referenciaTurnosActivos.on('value', gotActivos, errData);
 
 var refMensaje = database.ref(stringFecha + '/texto-informativo');
 refMensaje.on('value', gotMensaje, errData);
+
+var refAnuncio = database.ref(stringFecha + '/anuncio');
+refAnuncio.on('value', gotAnuncio, errData);
 
 function gotData(data) {
     borrarAnterioresProximosTurnos();
@@ -71,8 +67,6 @@ function gotActivos(data) {
     var turnos = data.val();
     var keys = Object.keys(turnos);
 
-    console.log(keys.length);
-
     for (let i = 0; i < keys.length; i++) {
         var k = keys[i];
         var turno = turnos[k].turno;
@@ -99,6 +93,34 @@ function gotMensaje(data) {
     mensajeInformativo.innerText = texto;
 }
 
+function gotAnuncio(data) {
+    var infoAnuncio = data.val();
+    var keys = Object.keys(infoAnuncio);
+
+    for (let i = 0; i < keys.length; i++) {
+        var k = keys[i];
+        var turno = infoAnuncio[k].turno;
+        var consultorio = infoAnuncio[k].consultorio;
+        
+        const anuncio = document.createElement('div');
+        anuncio.classList.add('contenedor-anuncio');
+        anuncio.setAttribute("id", k);
+        anuncio.innerHTML = `
+        <div class="big-ass-number">
+            <h1 class="avergas">${turno}</h1>
+        </div>
+        `
+
+        document.body.appendChild(anuncio);
+
+        hablalesClaro(turno, consultorio);
+
+        setTimeout(() => {
+            limpiarAnuncio(k);
+        }, 5000);
+    }
+}
+
 function errData(err) {
     console.log('Error!');
     console.log(err);
@@ -119,4 +141,18 @@ function borrarAnterioresTurnosActivos() {
         </div>
     </div>
     `
+}
+
+function hablalesClaro(turno, consultorio) {
+    var msg = new SpeechSynthesisUtterance();
+        msg.lang = 'es';
+        msg.text = `El turno, ${turno} pasar al consultorio, ${consultorio}`;
+        window.speechSynthesis.speak(msg);
+}
+
+
+function limpiarAnuncio(id) {
+    refAnuncio.child(id).remove();
+    var anuncio = document.getElementById(id);
+    document.body.removeChild(anuncio);
 }

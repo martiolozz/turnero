@@ -133,6 +133,14 @@ function gotActivo(data) {
 
         contenedorTurnoDetallado.appendChild(contenedorDoble);
 
+        const botonLlamar = document.querySelector('.btn-llamar');
+        botonLlamar.addEventListener('click', () => {
+            firebase.database().ref(stringFecha + '/anuncio').push({
+                consultorio: consultorio,
+                turno: turno
+            })
+        })
+
         const botonFinalizar = document.querySelector('.btn-cerrar');
         botonFinalizar.addEventListener('click', () => {
             createPopupFinalizar();
