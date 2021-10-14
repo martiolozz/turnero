@@ -1,5 +1,7 @@
 const contenedorProximosTurnos = document.querySelector('.contenedor-turnos');
 const contenedorTurnoDetallado = document.querySelector('.contenedor-turno-detallado');
+const btnChat = document.querySelector('.btn-chat');
+const contenedorChat = document.querySelector('.toast-container');
 let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 const nombreProfesional = document.querySelector('.nombre');
 
@@ -37,6 +39,10 @@ refConsultorios.orderByChild("consultorio").equalTo("112").on('value', gotProfes
 // Creo la referencia al "nodo" turnos-activos
 var referenciaTurnoActivo = database.ref(stringFecha + '/turnos-activos');
 referenciaTurnoActivo.orderByChild("consultorio").equalTo("112").on('value', gotActivo, errData);
+
+// Creo la referencia al "nodo" chat
+var referenciaChat = database.ref(stringFecha + '/chat');
+referenciaChat.orderByChild("receptor").equalTo("Consultorio 112:").on('value', gotChat, errData);
 
 // Esta es la funcion para pasarle referenciaProximosTurnos
 function gotProximos(data) {
@@ -128,6 +134,7 @@ function gotActivo(data) {
             <h2 class="titulo-mediano">Turno: ${turno}</h2>
             <h2 class="titulo-mediano">Horario: ${horaInicio} - ${horaFin}</h2>
         </div>
+        <div class="barra-abajo"></div>
         <div class="barra-tempo"></div>
         `
 
@@ -182,6 +189,83 @@ function gotActivo(data) {
     }
 }
 
+function gotChat(data) {
+
+    limpiarChat();
+
+    var mensajes = data.val();
+    var keys = Object.keys(mensajes);
+
+    for (let i = 0; i < keys.length; i++) {
+        var k = keys[i];
+        var consultorio = mensajes[k].remitente;
+        var mensaje = mensajes[k].mensaje;
+        
+        const chat = document.createElement('div');
+        chat.classList.add('toast');
+        chat.setAttribute("id", k);
+        chat.innerHTML = `
+        <h3 class="remitente">${consultorio}:</h3>
+        <h5 class="mensaje">${mensaje}</h5>
+        <div class="botones-mensaje">
+            <button class="cerrar-mensaje">Cerrar</button>
+            <button class="replicar">Responder</button>
+        </div>
+        `
+
+        contenedorChat.appendChild(chat);
+
+        const btnCerrar = document.querySelectorAll('.cerrar-mensaje');
+        const btnResponder = document.querySelectorAll('.replicar');
+
+        for (let i = 0; i < btnCerrar.length; i++) {
+            btnCerrar[i].addEventListener('click', () => {
+                referenciaChat.child(btnCerrar[i].parentElement.parentElement.id).remove(); 
+                btnCerrar[i].parentElement.parentElement.remove();
+            })  
+        }
+
+        for (let i = 0; i < btnResponder.length; i++) {
+            btnResponder[i].addEventListener('click', () => {
+                btnResponder[i].parentElement.parentElement.remove();
+                referenciaChat.child(btnResponder[i].parentElement.parentElement.id).remove();
+                const popup = document.createElement('div');
+                popup.classList.add('popup-enviar-mensaje');
+
+                popup.innerHTML = `
+                <h2>Nuevo mensaje:</h2>
+                <textarea class="mensaje"></textarea>
+                <div class="botones-enviar-mensaje">
+                    <button class="cancelar-mensaje">Cancelar</button>
+                    <button class="enviar-mensaje">Enviar</button>
+                </div>
+                `
+
+                document.body.appendChild(popup);
+
+                const btnCancelar = document.querySelector('.cancelar-mensaje');
+                const btnEnviar = document.querySelector('.enviar-mensaje');
+                const mensaje = document.querySelector('.mensaje');
+
+                btnEnviar.addEventListener('click', () => {
+                    firebase.database().ref(stringFecha + '/chat').push({
+                        remitente: "Consultorio 112",
+                        receptor: "recepcion",
+                        mensaje: mensaje.value
+                    });
+                    btnEnviar.parentElement.parentElement.remove();
+                })
+
+                btnCancelar.addEventListener('click', () => {
+                    btnCancelar.parentElement.parentElement.remove();
+                })
+            })
+            
+        }
+
+    }
+}
+
 function activarTurno(data) {
     var turno = data.val();
     
@@ -205,6 +289,10 @@ function borrarAnterioresProximosTurnos() {
 
 function limpiarTurnoActivo() {
     contenedorTurnoDetallado.innerHTML = '';
+}
+
+function limpiarChat() {
+    contenedorChat.innerHTML = ''
 }
 
 function createPopupFinalizar() {
@@ -254,3 +342,36 @@ function borrarPopup() {
 function limpiarNombreProfesional() {
     nombreProfesional.innerHTML = ''
 }
+
+btnChat.addEventListener('click', () => {
+    const popup = document.createElement('div');
+    popup.classList.add('popup-enviar-mensaje');
+
+    popup.innerHTML = `
+    <h2>Nuevo mensaje a recepcion:</h2>
+    <textarea class="mensaje"></textarea>
+    <div class="botones-enviar-mensaje">
+        <button class="cancelar-mensaje">Cancelar</button>
+        <button class="enviar-mensaje">Enviar</button>
+    </div>
+    `
+
+    document.body.appendChild(popup);
+
+    const btnEnviar = document.querySelector('.enviar-mensaje');
+    const btnCancelar = document.querySelector('.cancelar-mensaje');
+    const mensaje = document.querySelector('.mensaje');
+
+    btnEnviar.addEventListener('click', () => {
+        firebase.database().ref(stringFecha + '/chat').push({
+            remitente: "Consultorio 112",
+            receptor: "recepcion",
+            mensaje: mensaje.value
+        });
+        btnEnviar.parentElement.parentElement.remove();
+    })
+
+    btnCancelar.addEventListener('click', () => {
+        btnCancelar.parentElement.parentElement.remove();
+    })
+})

@@ -7,6 +7,7 @@ const contenedorTurnosActivos = document.querySelector('.contenedor-turnos-activ
 const inputNombre = document.getElementById('input-nombre');
 const textoFecha = document.querySelector('.texto-fecha');
 const textoHora = document.querySelector('.texto-hora');
+const contenedorChat = document.querySelector('.toast-container');
 let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
 // Conexion con firebase
@@ -57,6 +58,10 @@ referenciaProximosTurnos.on('value', gotProximos, errData);
 // Creo la referencia al "nodo" proximos-turnos
 var referenciaTurnosActivos = database.ref(stringFecha + '/turnos-activos');
 referenciaTurnosActivos.on('value', gotActivos, errData);
+
+// Creo la referencia al "nodo" chat
+var referenciaChat = database.ref(stringFecha + '/chat');
+referenciaChat.orderByChild("receptor").equalTo("recepcion").on('value', gotChat, errData);
 
 // Esta es la funcion para pasarle referenciaProximosTurnos
 function gotProximos(data) {
@@ -194,6 +199,84 @@ function gotActivos(data) {
     }
 }
 
+function gotChat(data) {
+
+    limpiarChat();
+
+    var mensajes = data.val();
+    var keys = Object.keys(mensajes);
+
+    for (let i = 0; i < keys.length; i++) {
+        var k = keys[i];
+        var consultorio = mensajes[k].remitente;
+        var mensaje = mensajes[k].mensaje;
+        
+        const chat = document.createElement('div');
+        chat.classList.add('toast');
+        chat.setAttribute("id", k);
+        chat.innerHTML = `
+        <h3 class="remitente">${consultorio}:</h3>
+        <h5 class="mensaje">${mensaje}</h5>
+        <div class="botones-mensaje">
+            <button class="cerrar-mensaje">Cerrar</button>
+            <button class="replicar">Responder</button>
+        </div>
+        `
+
+        contenedorChat.appendChild(chat);
+
+        const btnCerrar = document.querySelectorAll('.cerrar-mensaje');
+        const btnResponder = document.querySelectorAll('.replicar');
+
+        for (let i = 0; i < btnCerrar.length; i++) {
+            btnCerrar[i].addEventListener('click', () => {
+                referenciaChat.child(btnCerrar[i].parentElement.parentElement.id).remove(); 
+                btnCerrar[i].parentElement.parentElement.remove();
+            })  
+        }
+
+        for (let i = 0; i < btnResponder.length; i++) {
+            btnResponder[i].addEventListener('click', () => {
+                var receptor = (btnResponder[i].parentElement.parentElement.children[0].innerHTML);
+                btnResponder[i].parentElement.parentElement.remove();
+                referenciaChat.child(btnResponder[i].parentElement.parentElement.id).remove();
+                const popup = document.createElement('div');
+                popup.classList.add('popup-enviar-mensaje');
+
+                popup.innerHTML = `
+                <h2>Nuevo mensaje:</h2>
+                <textarea class="mensaje"></textarea>
+                <div class="botones-enviar-mensaje">
+                    <button class="cancelar-mensaje">Cancelar</button>
+                    <button class="enviar-mensaje">Enviar</button>
+                </div>
+                `
+
+                document.body.appendChild(popup);
+
+                const btnCancelar = document.querySelector('.cancelar-mensaje');
+                const btnEnviar = document.querySelector('.enviar-mensaje');
+                const mensaje = document.querySelector('.mensaje');
+
+                btnEnviar.addEventListener('click', () => {
+                    firebase.database().ref(stringFecha + '/chat').push({
+                        remitente: "recepcion",
+                        receptor: receptor,
+                        mensaje: mensaje.value
+                    });
+                    btnEnviar.parentElement.parentElement.remove();
+                })
+
+                btnCancelar.addEventListener('click', () => {
+                    btnCancelar.parentElement.parentElement.remove();
+                })
+            })
+            
+        }
+
+    }
+}
+
 // La funcion para si algo pasa en las referecias a firebase
 function errData(err) {
     console.log('Error!');
@@ -207,6 +290,10 @@ function borrarAnterioresConsultorios() {
 
 function borrarAnterioresTurnosActivos() {
     contenedorTurnosActivos.innerHTML = ''
+}
+
+function limpiarChat() {
+    contenedorChat.innerHTML = ''
 }
 
 // Event listener del boton asignar consultorio

@@ -66,6 +66,7 @@ body {
     position: absolute;
     bottom: 20px;
     right: 20px;
+    cursor: pointer;
 }
 
 .btn-chat:hover {
@@ -243,6 +244,14 @@ body {
     font-size: 1.5rem;
 }
 
+.barra-abajo {
+    background-color: #afafaf;
+    width: 80%;
+    height: 4px;
+    position: absolute;
+    bottom: 20px;
+}
+
 .barra-tempo {
     background-color: #3B4294;
     width: 80%;
@@ -259,6 +268,106 @@ body {
     position: absolute;
     left: 50px;
     bottom: 10px;
+}
+
+.popup-enviar-mensaje {
+    background-color: #fff;
+    color: #3B4294;
+    border-radius: 10px;
+    width: 400px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+}
+
+.mensaje {
+    width: 80%;
+    height: 40%;
+}
+
+.enviar-mensaje {
+    background-color: #3B4294;
+    font-size: 0.9rem;
+    font-family: inherit;
+    margin: 20px 0px;
+    border-radius: 5px;
+    color: #fff;
+    border: none;
+    width: 100px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.cancelar-mensaje {
+    background-color: #E61A2E;
+    font-size: 0.9rem;
+    font-family: inherit;
+    margin: 20px 0px;
+    border-radius: 5px;
+    color: #fff;
+    border: none;
+    width: 100px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.toast-container {
+    position: absolute;
+    bottom: 80px;
+    right: 40px;
+    max-width: 400px;
+    max-height: 90vh;
+    min-width: 300px;
+    overflow-y: scroll;
+}
+
+.toast {
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.remitente {
+    margin-bottom: 5px;
+    color: #3B4294;
+}
+
+.botones-mensaje {
+    padding-bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.replicar {
+    background-color: #3B4294;
+    font-size: 0.9rem;
+    font-family: inherit;
+    border-radius: 5px;
+    color: #fff;
+    border: none;
+    width: 100px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.cerrar-mensaje {
+    background-color: #E61A2E;
+    font-size: 0.9rem;
+    font-family: inherit;
+    border-radius: 5px;
+    color: #fff;
+    border: none;
+    width: 100px;
+    height: 30px;
+    cursor: pointer;
 }
 
 @keyframes grow {
