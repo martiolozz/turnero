@@ -129,6 +129,10 @@ body {
     cursor: pointer;
 }
 
+.btn-llamar.rojo {
+    color: #E61A2E;
+}
+
 .proximo-turno {
     background-color: rgba(59, 66, 148, 0.2);
     width: 25%;

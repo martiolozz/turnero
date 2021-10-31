@@ -9,6 +9,7 @@ const textoFecha = document.querySelector('.texto-fecha');
 const textoHora = document.querySelector('.texto-hora');
 const contenedorChat = document.querySelector('.toast-container');
 let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+var turno = 0;
 
 // Conexion con firebase
 var firebaseConfig = {
@@ -62,6 +63,10 @@ referenciaTurnosActivos.on('value', gotActivos, errData);
 // Creo la referencia al "nodo" chat
 var referenciaChat = database.ref(stringFecha + '/chat');
 referenciaChat.orderByChild("receptor").equalTo("recepcion").on('value', gotChat, errData);
+
+// Creo la referencia al "nodo" turno
+var refTurno = database.ref(stringFecha + '/turno');
+refTurno.on('value', gotTurno, errData);
 
 // Esta es la funcion para pasarle referenciaProximosTurnos
 function gotProximos(data) {
@@ -151,13 +156,18 @@ function gotConsultorios(data) {
                 // el cual queda con un UID como padre de el nodo
                 firebase.database().ref(stringFecha + '/proximos-turnos').push({
                         paciente: inputNombre.value,
-                        turno: inputTurno.value,
+                        turno: turno,
                         consultorio: nuevoConsultorio.children[0].innerHTML,
                         horaInicio: inputEntrada.value,
                         horaFin: inputSalida.value 
                 });
                 // elimino el popup para crear turno del DOM
+                
+                turno = turno + 1;
                 btnAceptar.parentElement.parentElement.parentElement.remove();
+                firebase.database().ref(stringFecha + '/turno').set({
+                    turno: turno
+                })
             })  
         
             // EventListener del boton cancelar crear turno
@@ -277,6 +287,12 @@ function gotChat(data) {
     }
 }
 
+function gotTurno(data) {
+    var numeroTurno = data.val();
+
+    turno = numeroTurno.turno;
+}
+
 // La funcion para si algo pasa en las referecias a firebase
 function errData(err) {
     console.log('Error!');
@@ -363,12 +379,6 @@ function createPopUpNuevo() {
         <div class="setting-nombre">
             <label>Nombre:</label>
             <input type="text" id="input-nombre" class="input-nombre">
-        </div>
-        <div class="contenedor-turno-consultorio">
-            <div class="setting">
-                <label>Turno:</label>
-                <input type="number" id="input-turno" min="1" max="1000" value="999">
-            </div>
         </div>
         <div class="contenedor-turno-consultorio">
             <div class="setting">

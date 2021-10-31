@@ -4,6 +4,7 @@ const btnChat = document.querySelector('.btn-chat');
 const contenedorChat = document.querySelector('.toast-container');
 let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 const nombreProfesional = document.querySelector('.nombre');
+var hayAnuncio = false;
 
 // Conexion con firebase
 var firebaseConfig = {
@@ -43,6 +44,9 @@ referenciaTurnoActivo.orderByChild("consultorio").equalTo("112").on('value', got
 // Creo la referencia al "nodo" chat
 var referenciaChat = database.ref(stringFecha + '/chat');
 referenciaChat.orderByChild("receptor").equalTo("Consultorio 112:").on('value', gotChat, errData);
+
+var refAnuncio = database.ref(stringFecha + '/anuncio');
+refAnuncio.on('value', gotAnuncio, errData);
 
 // Esta es la funcion para pasarle referenciaProximosTurnos
 function gotProximos(data) {
@@ -142,10 +146,12 @@ function gotActivo(data) {
 
         const botonLlamar = document.querySelector('.btn-llamar');
         botonLlamar.addEventListener('click', () => {
-            firebase.database().ref(stringFecha + '/anuncio').push({
-                consultorio: consultorio,
-                turno: turno
-            })
+            if (hayAnuncio == false) {
+                firebase.database().ref(stringFecha + '/anuncio').push({
+                    consultorio: consultorio,
+                    turno: turno
+                })
+            }
         })
 
         const botonFinalizar = document.querySelector('.btn-cerrar');
@@ -266,6 +272,19 @@ function gotChat(data) {
     }
 }
 
+function gotAnuncio(data) {
+    var anuncio = data.val();
+    var keys = Object.keys(anuncio);
+
+    if (keys.length > 0) {
+        hayAnuncio = true;
+        const botonLlamar = document.querySelector('.btn-llamar');
+        botonLlamar.classList.add("rojo");
+        setTimeout(falsetearAnuncio, 6000);
+    }
+    
+}
+
 function activarTurno(data) {
     var turno = data.val();
     
@@ -375,3 +394,9 @@ btnChat.addEventListener('click', () => {
         btnCancelar.parentElement.parentElement.remove();
     })
 })
+
+function falsetearAnuncio() {
+    hayAnuncio = false;
+    const botonLlamar = document.querySelector('.btn-llamar');
+    botonLlamar.classList.remove("rojo");
+}
