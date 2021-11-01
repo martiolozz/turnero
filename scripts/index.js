@@ -4,7 +4,7 @@ const turnosActivos = document.querySelector('.turnos-activos');
 const proximosTurnos = document.querySelector('.contenedor-proximos-turnos');
 const mensajeInformativo = document.querySelector('.mensaje');
 let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-
+const textoHora = document.querySelector('.texto-hora');
 
 var firebaseConfig = {
     apiKey: "AIzaSyASln_15XoqvOwSbCArUvhbe7laec_1r-Y",
@@ -17,6 +17,17 @@ var firebaseConfig = {
     };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+
+setInterval(ponerLaHora, 1000);
+
+function ponerLaHora() {
+    const fecha = new Date();
+    const hora = fecha.getHours();
+    const horaLegible = hora % 12
+    const minutos = fecha.getMinutes();
+    const segundos = fecha.getSeconds();
+    textoHora.innerHTML =  `${horaLegible < 1 ? `12` : horaLegible}:${minutos < 10 ? `0${minutos}` : minutos}:${segundos < 10 ? `0${segundos}` : segundos}`;
+}
 
 const fecha = new Date();
 const dia = fecha.getDate();
@@ -145,9 +156,9 @@ function borrarAnterioresTurnosActivos() {
 
 function hablalesClaro(turno, consultorio) {
     var msg = new SpeechSynthesisUtterance();
-        msg.lang = 'es';
-        msg.text = `El turno, ${turno} pasar al consultorio, ${consultorio}`;
-        window.speechSynthesis.speak(msg);
+    msg.lang = 'es';
+    msg.text = `El turno, ${turno} pasar al consultorio, ${consultorio}`;
+    window.speechSynthesis.speak(msg);
 }
 
 

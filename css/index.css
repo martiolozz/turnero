@@ -208,6 +208,22 @@ h2 {
     color: #fff;
 }
 
+.hora {
+    background-color: #fff;
+    color: #3B4294;
+    text-align: center;
+    height: 30px;
+    width: 120px;
+    position: absolute;
+    left: 0px;
+    bottom: 40px;
+}
+
+.texto-hora {
+    padding: 0;
+    margin: 0;
+}
+
 @keyframes animarTexto {
     0% {transform: translateX(100vw);}
     100% {transform: translateX(-100%);}
