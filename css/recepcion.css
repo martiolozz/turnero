@@ -7,6 +7,7 @@
 body {
     background-color: rgba(59, 66, 148, 0.1);
     font-family: 'Muli', sans-serif;
+    text-align: center;
     height: 100vh;
     margin: 0;
     overflow: hidden;
@@ -230,7 +231,7 @@ h4 {
     padding: 20px;
     border-radius: 5px;
     width: 150px;
-    height: 220px;
+    height: 270px;
     margin: 20px 20px 0px 20px;
 }
 
@@ -400,4 +401,20 @@ h4 {
     width: 100px;
     height: 30px;
     cursor: pointer;
+}
+
+#printableArea {
+    position: absolute;
+}
+
+.logo {
+	width: 200px;
+}
+
+.titulo {
+	font-size: 3rem;
+}
+
+.numero {
+	font-size: 2.5rem;
 }

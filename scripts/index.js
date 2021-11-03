@@ -65,7 +65,7 @@ function gotData(data) {
             <h3 class="numero-consultorio">C-${consultorio}</h3>
         </div>
         <div class="contenedor-num-turno">
-            <h3 class="numero-turno">T-${turno}</h3>
+            <h3 class="numero-turno">${turno}</h3>
         </div>
         `
 
@@ -77,6 +77,9 @@ function gotActivos(data) {
     borrarAnterioresTurnosActivos();
     var turnos = data.val();
     var keys = Object.keys(turnos);
+
+    var audio = new Audio('../audio/mensaje.mp3');
+    audio.play();
 
     for (let i = 0; i < keys.length; i++) {
         var k = keys[i];
@@ -90,7 +93,7 @@ function gotActivos(data) {
             <h3 class="numero-consultorio">C-${consultorio}</h3>
         </div>
         <div class="contenedor-num-turno">
-            <h3 class="numero-turno">T-${turno}</h3>
+            <h3 class="numero-turno">${turno}</h3>
         </div>
         `
         

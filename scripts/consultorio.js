@@ -70,7 +70,7 @@ function gotProximos(data) {
         nuevoTurno.setAttribute("id", k)
         nuevoTurno.innerHTML = `
         <div class="contenedor-num-consultorio">
-            <h3 class="numero-turno">T-${turno}</h3>
+            <h3 class="numero-turno">${turno}</h3>
         </div>
         <div class="contenedor-num-turno">
             <h3 class="horario">${horaInicio} - ${horaFin}</h3>

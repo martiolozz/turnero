@@ -9,6 +9,7 @@ const textoFecha = document.querySelector('.texto-fecha');
 const textoHora = document.querySelector('.texto-hora');
 const contenedorChat = document.querySelector('.toast-container');
 let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+let letras =  ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",];
 var turno = 0;
 
 // Conexion con firebase
@@ -92,7 +93,7 @@ function gotProximos(data) {
             <h3 class="numero-consultorio">C-${consultorio}</h3>
         </div>
         <div class="contenedor-num-turno">
-            <h3 class="numero-turno">T-${turno}</h3>
+            <h3 class="numero-turno">${turno}</h3>
         </div>
         `
 
@@ -102,7 +103,8 @@ function gotProximos(data) {
         // Aqui si estamos llamando un EventListener en los proximos turnos para
         // borralos de la base de datos en firebase, pero esto se va 
         nuevoTurno.addEventListener('click', () => {
-            referenciaProximosTurnos.child(nuevoTurno.id).remove();
+            printDiv(nuevoTurno.children[1].innerText, nuevoTurno.children[0].innerText);
+            setTimeout(refreshoneto, 3000);
         })
     }  
 
@@ -126,12 +128,14 @@ function gotConsultorios(data) {
         var profesion = consultorios[k].profesion;
         var horaEntrada = consultorios[k].horaEntrada;
         var horaSalida = consultorios[k].horaSalida;
+        var letraAsignada = letras[i];
 
         const nuevoConsultorio = document.createElement('div')
         nuevoConsultorio.classList.add('contenedor-consultorio')
         nuevoConsultorio.setAttribute("id", k)
         nuevoConsultorio.innerHTML = `
         <h2 class="numero-consultorio-grande">${consultorio}</h2>
+        <h2 class="numero-consultorio-grande">${letraAsignada}</h2>
         <h4 class="nombre-profesional">Dr. ${profesional}</h3>
         <h4 class="profesion">${profesion}</h3>
         <h4 class="horario">${horaEntrada} - ${horaSalida}</h3>
@@ -146,7 +150,6 @@ function gotConsultorios(data) {
             const btnAceptar = document.getElementById('aceptar');
             const btnCancelar = document.getElementById('cancelar');
             const inputNombre = document.getElementById('input-nombre');
-            const inputTurno = document.getElementById('input-turno');
             const inputEntrada = document.getElementById('input-entrada');
             const inputSalida = document.getElementById('input-salida');
     
@@ -154,9 +157,10 @@ function gotConsultorios(data) {
             btnAceptar.addEventListener('click', () => {
                 // Creo la referencia a 'proximos-turnos' en firebase y le pusheo el nuevo turno
                 // el cual queda con un UID como padre de el nodo
+                let turnoEspecifico = `${nuevoConsultorio.children[1].innerHTML}-${turno}`
                 firebase.database().ref(stringFecha + '/proximos-turnos').push({
                         paciente: inputNombre.value,
-                        turno: turno,
+                        turno: turnoEspecifico,
                         consultorio: nuevoConsultorio.children[0].innerHTML,
                         horaInicio: inputEntrada.value,
                         horaFin: inputSalida.value 
@@ -201,7 +205,7 @@ function gotActivos(data) {
             <h3 class="numero-consultorio">C-${consultorio}</h3>
         </div>
         <div class="contenedor-num-turno">
-            <h3 class="numero-turno">T-${turno}</h3>
+            <h3 class="numero-turno">${turno}</h3>
         </div>
         `  
         
@@ -234,6 +238,8 @@ function gotChat(data) {
         `
 
         contenedorChat.appendChild(chat);
+        var audio = new Audio('../audio/mensaje.mp3');
+        audio.play();
 
         const btnCerrar = document.querySelectorAll('.cerrar-mensaje');
         const btnResponder = document.querySelectorAll('.replicar');
@@ -452,4 +458,27 @@ function createPopupTexto() {
         </div>
     `
     contenedorTotal.appendChild(popup);
+}
+
+async function printDiv(turno, consultorio) {
+
+    document.body.innerHTML = `
+    <div id="printableArea">
+      <img class="logo" src="../images/logo.png">
+      <h1 class="titulo">Turno:</h1>
+      <h2 class="numero">${turno}</h2>
+      <h1 class="numero">Consultorio:</h1>
+      <h2 class="numero">${consultorio}</h2>
+	</div>
+    `
+
+    setTimeout(chonetada, 2000);
+}
+
+function chonetada() {
+    window.print();
+}
+
+function refreshoneto() {
+    location.reload();
 }
