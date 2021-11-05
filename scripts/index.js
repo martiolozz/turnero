@@ -77,6 +77,7 @@ function gotActivos(data) {
     borrarAnterioresTurnosActivos();
     var turnos = data.val();
     var keys = Object.keys(turnos);
+    keys = keys.reverse();
 
     var audio = new Audio('../audio/mensaje.mp3');
     audio.play();
