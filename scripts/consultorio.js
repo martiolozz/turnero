@@ -82,17 +82,17 @@ function gotProximos(data) {
 
         // Aqui llego y le pongo el event listener a los turnos-proximos
         nuevoTurno.addEventListener('click', () => {
-            if (contenedorTurnoDetallado.innerHTML === '') {
-                // Creo la referencia a la base de datos del turno que clickearon
-                var referenciaTurno = database.ref(stringFecha + '/proximos-turnos/' + nuevoTurno.id);
-                referenciaTurno.on('value', activarTurno, errData);
-                referenciaProximosTurnos.child(nuevoTurno.id).remove();
-                if (hayAnuncio == false) {
-                    console.log(nuevoTurno.children[0].innerText);
-                    firebase.database().ref(stringFecha + '/anuncio').push({
-                        consultorio: "112",
-                        turno: nuevoTurno.children[0].innerText
-                    })
+            if (hayAnuncio == false) {
+                console.log(nuevoTurno.children[0].innerText);
+                firebase.database().ref(stringFecha + '/anuncio').push({
+                    consultorio: "112",
+                    turno: nuevoTurno.children[0].innerText
+                })
+                if (contenedorTurnoDetallado.innerHTML === '') {
+                    // Creo la referencia a la base de datos del turno que clickearon
+                    var referenciaTurno = database.ref(stringFecha + '/proximos-turnos/' + nuevoTurno.id);
+                    referenciaTurno.on('value', activarTurno, errData);
+                    referenciaProximosTurnos.child(nuevoTurno.id).remove();
                 } else {
                     createPopupYahay(); 
                 }
