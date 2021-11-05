@@ -99,6 +99,7 @@ function gotProximos(data) {
                 }
             } else {
                 createPopupYahay();
+                setTimeout(falsetearAnuncio, 6000);
             }     
         })
     }  
