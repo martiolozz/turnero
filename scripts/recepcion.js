@@ -238,7 +238,7 @@ function gotChat(data) {
         `
 
         contenedorChat.appendChild(chat);
-        var audio = new Audio('../audio/mensaje.mp3');
+        var audio = new Audio('audio/mensaje.mp3');
         audio.play();
 
         const btnCerrar = document.querySelectorAll('.cerrar-mensaje');

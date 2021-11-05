@@ -79,7 +79,7 @@ function gotActivos(data) {
     var keys = Object.keys(turnos);
     keys = keys.reverse();
 
-    var audio = new Audio('../audio/mensaje.mp3');
+    var audio = new Audio('audio/mensaje.mp3');
     audio.play();
 
     for (let i = 0; i < keys.length; i++) {
