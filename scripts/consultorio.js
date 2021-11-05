@@ -82,6 +82,7 @@ function gotProximos(data) {
 
         // Aqui llego y le pongo el event listener a los turnos-proximos
         nuevoTurno.addEventListener('click', () => {
+            console.log(hayAnuncio);
             if (hayAnuncio == false) {
                 console.log(nuevoTurno.children[0].innerText);
                 firebase.database().ref(stringFecha + '/anuncio').push({
