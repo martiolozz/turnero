@@ -152,6 +152,7 @@ function gotConsultorios(data) {
             const inputNombre = document.getElementById('input-nombre');
             const inputEntrada = document.getElementById('input-entrada');
             const inputSalida = document.getElementById('input-salida');
+            const inputCategoria = document.getElementById('input-categoria');
     
             // EventListener del boton aceptar crear usuario
             btnAceptar.addEventListener('click', () => {
@@ -162,6 +163,7 @@ function gotConsultorios(data) {
                         paciente: inputNombre.value,
                         turno: turnoEspecifico,
                         consultorio: nuevoConsultorio.children[0].innerHTML,
+                        categoria: inputCategoria.value,
                         horaInicio: inputEntrada.value,
                         horaFin: inputSalida.value 
                 });
@@ -385,6 +387,10 @@ function createPopUpNuevo() {
         <div class="setting-nombre">
             <label>Nombre:</label>
             <input type="text" id="input-nombre" class="input-nombre">
+        </div>
+        <div class="contenedor-categorias-usuario">
+            <label>Categoria:</label>
+            <input type="text" id="input-categoria" class="input-categoria">
         </div>
         <div class="contenedor-turno-consultorio">
             <div class="setting">

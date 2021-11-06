@@ -145,6 +145,22 @@ body {
     margin: 3% 4%;
 }
 
+.proximo-turno.teleconsulta {
+    background-color: #cff2ee;
+}
+
+.proximo-turno.ambulatorio {
+    background-color: #fbd0fd;
+}
+
+.proximo-turno.consulta-externa {
+    background-color: #bd7bdf;
+}
+
+.proximo-turno.consulta-interna {
+    background-color: #fff;
+}
+
 .contenedor-num-consultorio {
     width: 100%;
     text-align: center;

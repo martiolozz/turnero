@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+        <link rel="stylesheet" href="./css/consultorio.css">
+        <title>Consultorio 301</title>
+    </head>
+    <body>
+        <div class="titulo-general">
+            <h1>Consultorio 301</h1>
+        </div>
+
+        <div class="contenedor-proximos-activo">
+            <div class="contenedor-proximos-turnos">
+                <div class="contenedor-titulo-mediano">
+                    <h2 class="titulo-mediano">Proximos Turnos</h2>
+                </div>
+                <div class="contenedor-turnos"></div>
+            </div>
+            <div class="contenedor-turno-activo">
+                <div class="contenedor-titulo-mediano">
+                    <h2 class="titulo-mediano">Turno Activo</h2>
+                </div>
+                <div class="contenedor-turno-detallado"></div>
+            </div>
+        </div>
+        <div class="contenedor-boton-chat">
+            <button class="btn-chat" id="btn-chat">
+                <i class="far fa-comment-alt"></i>
+            </button>
+        </div>
+        <div class="nombre-profesional">
+            <h2 class="nombre"></h2>
+        </div>
+        <div class="toast-container"></div>
+        <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-database.js"></script>
+        <script src="./scripts/consultorio301.js"></script>
+    </body>
+</html>

@@ -31,19 +31,19 @@ const stringFecha = `${dia} ${meses[mes - 1]} ${year}`;
 
 // Creo la referencia al "nodo" proximos-turnos
 var referenciaProximosTurnos = database.ref(stringFecha + '/proximos-turnos');
-referenciaProximosTurnos.orderByChild("consultorio").equalTo("112").on('value', gotProximos, errData);
+referenciaProximosTurnos.orderByChild("consultorio").equalTo("308").on('value', gotProximos, errData);
 
 // Creo la referencia al "nodo" consultorios en la base de datos
 var refConsultorios = database.ref(stringFecha + '/consultorios');
-refConsultorios.orderByChild("consultorio").equalTo("112").on('value', gotProfesional, errData);
+refConsultorios.orderByChild("consultorio").equalTo("308").on('value', gotProfesional, errData);
 
 // Creo la referencia al "nodo" turnos-activos
 var referenciaTurnoActivo = database.ref(stringFecha + '/turnos-activos');
-referenciaTurnoActivo.orderByChild("consultorio").equalTo("112").on('value', gotActivo, errData);
+referenciaTurnoActivo.orderByChild("consultorio").equalTo("308").on('value', gotActivo, errData);
 
 // Creo la referencia al "nodo" chat
 var referenciaChat = database.ref(stringFecha + '/chat');
-referenciaChat.orderByChild("receptor").equalTo("Consultorio 112:").on('value', gotChat, errData);
+referenciaChat.orderByChild("receptor").equalTo("Consultorio 308:").on('value', gotChat, errData);
 
 var refAnuncio = database.ref(stringFecha + '/anuncio');
 refAnuncio.on('value', gotAnuncio, errData);
@@ -99,7 +99,7 @@ function gotProximos(data) {
             if (hayAnuncio == false) {
                 console.log(nuevoTurno.children[0].innerText);
                 firebase.database().ref(stringFecha + '/anuncio').push({
-                    consultorio: "112",
+                    consultorio: "308",
                     turno: nuevoTurno.children[0].innerText
                 })
                 if (contenedorTurnoDetallado.innerHTML === '') {
@@ -279,7 +279,7 @@ function gotChat(data) {
 
                 btnEnviar.addEventListener('click', () => {
                     firebase.database().ref(stringFecha + '/chat').push({
-                        remitente: "Consultorio 112",
+                        remitente: "Consultorio 308",
                         receptor: "recepcion",
                         mensaje: mensaje.value
                     });
@@ -407,7 +407,7 @@ btnChat.addEventListener('click', () => {
 
     btnEnviar.addEventListener('click', () => {
         firebase.database().ref(stringFecha + '/chat').push({
-            remitente: "Consultorio 112",
+            remitente: "Consultorio 308",
             receptor: "recepcion",
             mensaje: mensaje.value
         });
